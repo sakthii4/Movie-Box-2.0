@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = ({ onSearch }) => {
     const [query, setQuery] = useState('');
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -11,12 +12,13 @@ const Header = ({ onSearch }) => {
         if (query.trim()) {
             onSearch(query);
             navigate('/');
+            setIsSearchOpen(false); // Close search on mobile after submit
         }
     };
 
     return (
         <header className="bg-secondary/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/10">
-            <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="container mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
                     <Film className="w-8 h-8 text-accent" />
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
@@ -24,6 +26,7 @@ const Header = ({ onSearch }) => {
                     </h1>
                 </div>
 
+                {/* Desktop Search */}
                 <form onSubmit={handleSubmit} className="relative w-full max-w-md hidden md:block">
                     <input
                         type="text"
@@ -35,10 +38,28 @@ const Header = ({ onSearch }) => {
                     <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
                 </form>
 
-                {/* Mobile Search Icon (could expand to a modal or input) */}
-                <button className="md:hidden text-white">
+                {/* Mobile Search Icon */}
+                <button
+                    className="md:hidden text-white"
+                    onClick={() => setIsSearchOpen(!isSearchOpen)}
+                >
                     <Search className="w-6 h-6" />
                 </button>
+
+                {/* Mobile Search Input */}
+                {isSearchOpen && (
+                    <form onSubmit={handleSubmit} className="w-full md:hidden relative animate-in slide-in-from-top-2 duration-200">
+                        <input
+                            type="text"
+                            placeholder="Search movies..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            autoFocus
+                            className="w-full bg-primary/50 border border-white/10 rounded-full py-2 px-4 pl-10 focus:outline-none focus:border-accent transition-colors text-white placeholder-gray-400"
+                        />
+                        <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
+                    </form>
+                )}
             </div>
         </header>
     );

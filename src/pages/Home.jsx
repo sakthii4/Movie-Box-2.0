@@ -34,6 +34,7 @@ const Home = ({ searchResults }) => {
                     <CategorySection title="Marvel Universe" keyword="marvel" />
                     <CategorySection title="Sci-Fi Hits" keyword="star wars" />
                     <CategorySection title="Comedy" keyword="comedy" />
+                    <CategorySection title="Tamil Movies" keyword="tamil" />
                 </>
             )}
         </div>
